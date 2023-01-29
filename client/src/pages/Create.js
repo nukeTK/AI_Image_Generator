@@ -1,6 +1,6 @@
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 import { getRandomPrompt } from "../utils";
 import {
   Button,
@@ -56,7 +56,27 @@ const Create = () => {
       alert("Enter the prompt");
     }
   };
-  const handleSubmit = () => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (form.prompt && form.photo) {
+      setLoading(true);
+      try {
+        const response = await fetch("http://localhost:8080/api/v1/post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+        });
+        await response.json();
+        navigate("/");
+      } catch (error) {
+        alert(error);
+      } finally {
+        setLoading(false);
+      }
+    } else alert("Enter the prompt and genrate the image");
+  };
 
   return (
     <Box
@@ -108,9 +128,9 @@ const Create = () => {
           <Paper
             sx={{
               width: "200px",
-              height:"200px",
+              height: "200px",
               position: "relative",
-              borderRadius:"20px"
+              borderRadius: "20px",
             }}
           >
             {form.photo ? (

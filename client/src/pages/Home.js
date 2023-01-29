@@ -36,6 +36,9 @@ const Home = () => {
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
   };
+
+  
+
   return (
     <Box sx={{ width: "80%", margin: "10px auto" }}>
       <Stack direction="column" spacing={1}>
