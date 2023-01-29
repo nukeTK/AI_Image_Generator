@@ -48,9 +48,9 @@ const Home = () => {
           id="outlined-basic"
           label="Search Something..."
           variant="outlined"
-          sx={{ width: "20%" }}
+          sx={{ width: { xs: "80%", md: "20%" } }}
           size="small"
-          handleChange={handleSearchChange}
+          onChange={handleSearchChange}
           value={searchText}
         />
       </Stack>

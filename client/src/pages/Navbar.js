@@ -29,17 +29,25 @@ const Navbar = () => {
       >
         <Box
           component="img"
-          sx={{ height: "35px", width: "35px", p:"2px" }}
+          sx={{ height: "35px", width: "35px", p: "2px" }}
           src={logo}
           alt="logo"
         />
         <Typography variant="h6" sx={{ color: "black", flex: "0.98" }}>
-          OpenAI
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+              color: "black",
+            }}
+          >
+            OpenAI
+          </Link>
         </Typography>
         <Typography
           variant="h6"
           sx={{
-            width: "5%",
+            width: { xs: "20%", md: "5%" },
           }}
         >
           <Link
