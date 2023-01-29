@@ -31,8 +31,33 @@ const Create = () => {
     setForm({ ...form, prompt: randomPrompt });
   };
 
+  const genratingImage = async () => {
+    if (form.prompt) {
+      try {
+        setLoading(true);
+        setGenratingImg(true);
+        const response = await fetch("http://localhost:8080/api/v1/dalle", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt: form.prompt }),
+        });
+        const data = await response.json();
+        console.log(data);
+        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+      } catch (error) {
+        alert(error);
+      } finally {
+        setLoading(false);
+        setGenratingImg(false);
+      }
+    } else {
+      alert("Enter the prompt");
+    }
+  };
   const handleSubmit = () => {};
-  console.log(form);
+
   return (
     <Box
       sx={{
@@ -80,13 +105,24 @@ const Create = () => {
               Click Here For Random Prompt
             </Typography>
           </Stack>
-          <Paper sx={{ width: "40%", position: "relative" }}>
+          <Paper
+            sx={{
+              width: "200px",
+              height:"200px",
+              position: "relative",
+              borderRadius:"20px"
+            }}
+          >
             {form.photo ? (
               <Box
                 component="img"
                 src={form.photo}
                 alt={form.prompt}
-                sx={{ objectFit: "cover", width: "100%" }}
+                sx={{
+                  objectFit: "cover",
+                  width: "100%",
+                  borderRadius: "10px",
+                }}
               />
             ) : (
               <Box
@@ -115,19 +151,23 @@ const Create = () => {
               </>
             )}
           </Paper>
-          <Button variant="contained" color="success">
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => genratingImage()}
+          >
             {genratingImg ? "Genrating...." : "Generate AI Image"}
           </Button>
         </Stack>
       </form>
       <Stack spacing={1}>
-      <Typography variant="caption"  sx={{marginTop:"10px"}}>
-        ** Once you have created the image you want, you can share it with
-        others in the community **
-      </Typography>
-      <Button variant="contained" sx={{bgcolor:"#8253D1 "}} >
-        Share with community
-      </Button>
+        <Typography variant="caption" sx={{ marginTop: "10px" }}>
+          ** Once you have created the image you want, you can share it with
+          others in the community **
+        </Typography>
+        <Button variant="contained" sx={{ bgcolor: "#8253D1 " }}>
+          Share with community
+        </Button>
       </Stack>
     </Box>
   );
