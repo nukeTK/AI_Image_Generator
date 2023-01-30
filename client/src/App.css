@@ -1,0 +1,57 @@
+.container {
+  position: relative;
+  width: 300px;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: 0%;
+  top: 0%;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.5s ease;
+}
+
+.container:hover .overlay {
+  display: block;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.title {
+  position: absolute;
+  top: 70%;
+  padding: 10px;
+  display: none;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.button {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  opacity: 1;
+  left: 86%;
+  top: 85%;
+  transition: opacity 0.35s ease;
+  cursor: pointer;
+  border: 1px solid;
+  background: rgba(0, 0, 0, 0);
+  border: none;
+  opacity: 0;
+}
+.icon {
+  width: 100%;
+  object-fit: cover;
+}
+
+.container:hover .button {
+  opacity: 1;
+}
+
+.container:hover .title {
+  display: block;
+  background-color: aliceblue;
+}

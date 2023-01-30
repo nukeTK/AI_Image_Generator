@@ -1,38 +1,37 @@
-import { Card, CardContent, CardMedia, Divider, Grid, Typography } from '@mui/material'
-import React from 'react'
+import { Grid, Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import React from "react";
+import download from "../asset/download.png";
+import { downloadImage } from "../utils";
 
-const CardComp = ({post}) => {
+const CardComp = ({ _id, name, prompt, photo }) => {
   return (
-    <Grid post sx={{marginLeft:"5px"}}>
-    <Card
-      elevation={3}
-      sx={{ width: 380, height: 500, borderRadius: "20px" }}
-    >
-      <CardMedia
-        component="img"
-        alt="AI"
-        height="300"
-        image={post.photo}
-        sx={{
-          objectFit: "cover",
-          objectPosition: "top",
-          transition: "0.4s ease",
-          borderStartStartRadius: "20px",
-          "&:hover": {
-            transform: "scale(1.10)",
-            cursor: "pointer",
-          },
-        }}
-      />
-      <Divider />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {post.name}
-        </Typography>
-      </CardContent>
-    </Card>
-  </Grid>
-  )
-}
+    <Grid rowGap={1}>
+      <div className="container">
+        <Box
+          component="img"
+          alt="AI"
+          src={photo}
+          sx={{
+            position: "relative",
+            width: "100%",
+            borderRadius: "20px",
+            objectFit: "cover",
+            objectPosition: "top",
+          }}
+        />
+        <div className="overlay">
+          <h4 className="title">
+            {name} <br />
+            {prompt.slice(0, 50) + "...."}
+          </h4>
+          <button className="button" onClick={() => downloadImage(_id, photo)}>
+            <img src={download} alt="download" className="icon" />
+          </button>
+        </div>
+      </div>
+    </Grid>
+  );
+};
 
-export default CardComp
+export default CardComp;

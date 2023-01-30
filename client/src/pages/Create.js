@@ -1,6 +1,6 @@
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import { json, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getRandomPrompt } from "../utils";
 import {
   Button,
@@ -21,7 +21,6 @@ const Create = () => {
   });
   const [genratingImg, setGenratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isSurprise, setIsSurprise] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -34,7 +33,6 @@ const Create = () => {
   const genratingImage = async () => {
     if (form.prompt) {
       try {
-        setLoading(true);
         setGenratingImg(true);
         const response = await fetch("http://localhost:8080/api/v1/dalle", {
           method: "POST",
@@ -44,16 +42,14 @@ const Create = () => {
           body: JSON.stringify({ prompt: form.prompt }),
         });
         const data = await response.json();
-        console.log(data);
         setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
       } catch (error) {
         alert(error);
       } finally {
-        setLoading(false);
         setGenratingImg(false);
       }
     } else {
-      alert("Enter the prompt");
+      alert("please provide the proper prompt");
     }
   };
   const handleSubmit = async (e) => {
@@ -66,23 +62,24 @@ const Create = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(form),
+          body: JSON.stringify({...form}),
         });
         await response.json();
         navigate("/");
       } catch (error) {
+        
         alert(error);
       } finally {
         setLoading(false);
       }
-    } else alert("Enter the prompt and genrate the image");
+    } else alert("Enter the prompt and generate the image");
   };
 
   return (
     <Box
       sx={{
         width: { xs: "80%", md: "30%" },
-        margin: { xs: "10px 40px", md: "30px 200px" },
+        margin: { xs: "10px auto", md: "50px auto" },
       }}
     >
       <form onSubmit={handleSubmit}>
@@ -163,6 +160,7 @@ const Create = () => {
                     left: "0%",
                     top: "0%",
                     opacity: "0.7",
+                    borderRadius: "20px",
                   }}
                 />
                 <CircularProgress
@@ -179,16 +177,20 @@ const Create = () => {
             {genratingImg ? "Genrating...." : "Generate AI Image"}
           </Button>
         </Stack>
+        <Stack spacing={1}>
+          <Typography variant="caption" sx={{ marginTop: "10px" }}>
+            ** Once you have created the image you want, you can share it with
+            others in the community **
+          </Typography>
+          <Button
+            variant="contained"
+            type="submit"
+            sx={{ bgcolor: "#8253D1 " }}
+          >
+            Share with community
+          </Button>
+        </Stack>
       </form>
-      <Stack spacing={1}>
-        <Typography variant="caption" sx={{ marginTop: "10px" }}>
-          ** Once you have created the image you want, you can share it with
-          others in the community **
-        </Typography>
-        <Button variant="contained" sx={{ bgcolor: "#8253D1 " }}>
-          Share with community
-        </Button>
-      </Stack>
     </Box>
   );
 };

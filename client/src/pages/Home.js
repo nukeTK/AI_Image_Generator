@@ -12,18 +12,20 @@ import CardComp from "../components/CardComp";
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [allpost, setAllPost] = useState(null);
-  const [searchText, setSearchText] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  const [searchedResults, setSearchedResults] = useState(null);
 
   const RenderCard = ({ data, title }) => {
     if (data?.length > 0) {
-      return data.map((post, index) => <CardComp key={index} {...post} />);
+      return data.map((post) => <CardComp key={post._id} {...post} />);
     }
     return (
       <Typography
         variant="body1"
         sx={{
           margin: "20px 8px",
-          bgcolor: "#845EC2",
+          bgcolor: "#C087D6",
           borderRadius: "10px",
           p: "5px",
         }}
@@ -43,8 +45,7 @@ const Home = () => {
       });
       if (response.ok) {
         const result = await response.json();
-        setAllPost(result.data);
-        console.log(result.data)
+        setAllPost(result.data.reverse());
       }
     } catch (error) {
       alert(error);
@@ -57,7 +58,19 @@ const Home = () => {
     fetchPosts();
   }, []);
   const handleSearchChange = (e) => {
+    clearTimeout(searchTimeout);
     setSearchText(e.target.value);
+
+    setSearchTimeout(
+      setTimeout(() => {
+        const searchResult = allpost.filter(
+          (item) =>
+            item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            item.prompt.toLowerCase().includes(searchText.toLowerCase())
+        );
+        setSearchedResults(searchResult);
+      }, 500)
+    );
   };
 
   return (
@@ -84,10 +97,24 @@ const Home = () => {
         </div>
       ) : (
         <>
-          {searchText && <Typography variant="h6">{searchText}</Typography>}
-          <Grid container direction="row" spacing={1}>
+          {" "}
+          {searchText && (
+            <>
+              <Typography variant="body1">Showing Resuls for </Typography>
+              <Typography variant="subtitle">{searchText}</Typography>:
+            </>
+          )}
+          <Grid
+            container
+            direction="row"
+            spacing={1}
+            sx={{ marginTop: "10px" }}
+          >
             {searchText ? (
-              <RenderCard data={searchText} title="No search result found" />
+              <RenderCard
+                data={searchedResults}
+                title="No search result found"
+              />
             ) : (
               <RenderCard data={allpost} title="No Post Yet" />
             )}
