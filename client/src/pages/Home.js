@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardComp from "../components/CardComp";
 
 const Home = () => {
@@ -32,12 +32,33 @@ const Home = () => {
       </Typography>
     );
   };
+  const fetchPosts = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("http://localhost:8080/api/v1/post", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        const result = await response.json();
+        setAllPost(result.data);
+        console.log(result.data)
+      }
+    } catch (error) {
+      alert(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
   };
-
-  
 
   return (
     <Box sx={{ width: "80%", margin: "10px auto" }}>

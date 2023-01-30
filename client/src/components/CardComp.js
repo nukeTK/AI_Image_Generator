@@ -12,7 +12,7 @@ const CardComp = ({post}) => {
         component="img"
         alt="AI"
         height="300"
-        image=""
+        image={post.photo}
         sx={{
           objectFit: "cover",
           objectPosition: "top",
@@ -27,7 +27,7 @@ const CardComp = ({post}) => {
       <Divider />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          "Any"
+          {post.name}
         </Typography>
       </CardContent>
     </Card>
